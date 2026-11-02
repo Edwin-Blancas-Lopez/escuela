@@ -1,10 +1,12 @@
 package com.edwin.escuela.entities;
 
+import com.edwin.escuela.utils.StringCustomUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Table(
@@ -45,4 +47,39 @@ public class Maestro {
     @Builder.Default
     @OneToMany(mappedBy = "maestro", fetch = FetchType.LAZY)
     private List<Grupo> grupos = new ArrayList<>();
+
+    public static void validarDatos(String nombre, String apellidoPaterno, String apellidoMaterno, String email, String telefono) {
+        StringCustomUtils.validarTamanio(nombre, 1, 50, "El nombre es requerido y debe tener entre 1 y 50 caracteres");
+
+        StringCustomUtils.validarTamanio(apellidoPaterno, 1, 50, "El apellido paterno es requerido y debe tener entre 1 y 50 caracteres");
+
+        StringCustomUtils.validarTamanio(apellidoPaterno, 1, 50, "El apellido materno es requerido y debe tener entre 1 y 50 caracteres");
+
+        StringCustomUtils.validarTamanio(email, 8, 100, "El email es requerido y debe tener entre 8 y 100 caracteres");
+
+        StringCustomUtils.validarTamanio(telefono, 10, 10, "El telefono es requerido y debe tener exactamente 10 caracteres");
+
+        }
+
+    public void actualizar(String nombre, String apellidoPaterno, String apellidoMaterno, String email, String telefono){
+        validarDatos(nombre, apellidoPaterno, apellidoMaterno, email, telefono);
+
+        this.nombre = nombre.trim();
+        this.apellidoPaterno = apellidoPaterno.trim();
+        this.apellidoMaterno = apellidoMaterno.trim();
+        this.email = (email.trim().toLowerCase());
+        this.telefono = telefono.trim();
+    }
+
+    public static Maestro crear(String nombre, String apellidoPaterno, String apellidoMaterno, String email, String telefono){
+        validarDatos(nombre, apellidoPaterno, apellidoMaterno, email, telefono);
+
+        return Maestro.builder()
+                .nombre(nombre.trim())
+                .apellidoPaterno(apellidoPaterno.trim())
+                .apellidoMaterno(apellidoMaterno.trim())
+                .email(email.trim().toLowerCase())
+                .telefono(telefono.trim())
+                .build();
+    }
 }
