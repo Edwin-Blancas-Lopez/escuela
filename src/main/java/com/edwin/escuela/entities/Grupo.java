@@ -1,5 +1,6 @@
 package com.edwin.escuela.entities;
 
+import com.edwin.escuela.utils.StringCustomUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -45,4 +46,37 @@ public class Grupo {
 
     @Column(name = "PERIODO", nullable = false, length = 20)
     private String periodo;
+
+    public static void validarDatos(Curso curso, Maestro maestro, Aula aula, String periodo) {
+        if (curso == null) {
+            throw new IllegalArgumentException("El curso es requerido");
+        }
+        if (maestro == null) {
+            throw new IllegalArgumentException("El maestro es requerido");
+        }
+        if (aula == null) {
+            throw new IllegalArgumentException("El aula es requerida");
+        }
+        StringCustomUtils.validarTamanio(periodo, 1, 20, "El periodo es requerido y debe tener entre 1 y 20 caracteres");
+    }
+
+    public void actualizar(Curso curso, Maestro maestro, Aula aula, String periodo) {
+        validarDatos(curso, maestro, aula, periodo);
+
+        this.curso = curso;
+        this.maestro = maestro;
+        this.aula = aula;
+        this.periodo = periodo.trim();
+    }
+
+    public static Grupo crear(Curso curso, Maestro maestro, Aula aula, String periodo) {
+        validarDatos(curso, maestro, aula, periodo);
+
+        return Grupo.builder()
+                .curso(curso)
+                .maestro(maestro)
+                .aula(aula)
+                .periodo(periodo.trim())
+                .build();
+    }
 }

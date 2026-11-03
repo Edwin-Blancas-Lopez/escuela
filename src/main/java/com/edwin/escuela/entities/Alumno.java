@@ -1,5 +1,6 @@
 package com.edwin.escuela.entities;
 
+import com.edwin.escuela.utils.StringCustomUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +28,7 @@ public class Alumno {
     private String nombre;
 
     @Column(name = "APELLIDO_PATERNO", nullable = false, length = 50)
-    private String apelldoPaterno;
+    private String apellidoPaterno;
 
     @Column(name = "APELLIDO_MATERNO", nullable = false, length = 50)
     private String apellidoMaterno;
@@ -46,5 +47,34 @@ public class Alumno {
     @OneToMany(mappedBy = "alumno", fetch = FetchType.LAZY)
     private List<Inscripcion> inscripciones = new ArrayList<>();
 
+    public static void validarDatos(String nombre, String apellidoPaterno, String apellidoMaterno, String email, String matricula) {
+        StringCustomUtils.validarTamanio(nombre, 1, 50, "El nombre es requerido y debe tener entre 1 y 50 caracteres");
+        StringCustomUtils.validarTamanio(apellidoPaterno, 1, 50, "El apellido paterno es requerido y debe tener entre 1 y 50 caracteres");
+        StringCustomUtils.validarTamanio(apellidoMaterno, 1, 50, "El apellido materno es requerido y debe tener entre 1 y 50 caracteres");
+        StringCustomUtils.validarTamanio(email, 8, 100, "El email es requerido y debe tener entre 8 y 100 caracteres");
+        StringCustomUtils.validarTamanio(matricula, 1, 10, "La matrícula es requerida y debe tener entre 1 y 10 caracteres");
+    }
 
+    public void actualizar(String nombre, String apellidoPaterno, String apellidoMaterno, String email, String matricula) {
+        validarDatos(nombre, apellidoPaterno, apellidoMaterno, email, matricula);
+
+        this.nombre = nombre.trim();
+        this.apellidoPaterno = apellidoPaterno.trim();
+        this.apellidoMaterno = apellidoMaterno.trim();
+        this.email = email.trim().toLowerCase();
+        this.matricula = matricula.trim().toUpperCase();
+    }
+
+    public static Alumno crear(String nombre, String apellidoPaterno, String apellidoMaterno, String email, String matricula) {
+        validarDatos(nombre, apellidoPaterno, apellidoMaterno, email, matricula);
+
+        return Alumno.builder()
+                .nombre(nombre.trim())
+                .apellidoPaterno(apellidoPaterno.trim())
+                .apellidoMaterno(apellidoMaterno.trim())
+                .email(email.trim().toLowerCase())
+                .matricula(matricula.trim().toUpperCase())
+                .fechaIngreso(LocalDate.now())
+                .build();
+    }
 }

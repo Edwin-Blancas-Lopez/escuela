@@ -9,14 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Entity
-@Table(
-        name = "MAESTROS"
-       /* schema = "ESCUELA",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "MAESTRO_EMAIL_UK", columnNames = "EMAIL"),
-                @UniqueConstraint(name = "MAESTRO_TELEFONO_UK", columnNames = "TELEFONO")
-        }*/
-)
+@Table(name = "MAESTROS")
 @AllArgsConstructor
 @Getter
 @Builder
@@ -27,7 +20,7 @@ public class Maestro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_MAESTRO")
-    private Long idMaestro;
+    private Long id;
 
     @Column(name = "NOMBRE", nullable = false, length = 50)
     private String nombre;
@@ -48,12 +41,19 @@ public class Maestro {
     @OneToMany(mappedBy = "maestro", fetch = FetchType.LAZY)
     private List<Grupo> grupos = new ArrayList<>();
 
+    public String obtenerNombreCompleto(){
+        return String.join(" ",
+                this.getNombre(),
+                this.getApellidoPaterno(),
+                this.getApellidoMaterno());
+    }
+
     public static void validarDatos(String nombre, String apellidoPaterno, String apellidoMaterno, String email, String telefono) {
         StringCustomUtils.validarTamanio(nombre, 1, 50, "El nombre es requerido y debe tener entre 1 y 50 caracteres");
 
         StringCustomUtils.validarTamanio(apellidoPaterno, 1, 50, "El apellido paterno es requerido y debe tener entre 1 y 50 caracteres");
 
-        StringCustomUtils.validarTamanio(apellidoPaterno, 1, 50, "El apellido materno es requerido y debe tener entre 1 y 50 caracteres");
+        StringCustomUtils.validarTamanio(apellidoMaterno, 1, 50, "El apellido materno es requerido y debe tener entre 1 y 50 caracteres");
 
         StringCustomUtils.validarTamanio(email, 8, 100, "El email es requerido y debe tener entre 8 y 100 caracteres");
 
