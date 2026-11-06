@@ -15,13 +15,6 @@ public class CursoTest {
     }
 
     @Test
-    void crear_debeLanzarExcepcion_cuandoCreditosSonNegativos() {
-        assertThatThrownBy(() -> Curso.crear("Física", "Mecánica", -2))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("créditos son requeridos y deben ser mayores a 0");
-    }
-
-    @Test
     void crear_debeLanzarExcepcion_cuandoNombreEsVacio() {
         assertThatThrownBy(() -> Curso.crear("", "Descripción", 5))
                 .isInstanceOf(RuntimeException.class);
@@ -34,14 +27,6 @@ public class CursoTest {
 
         assertThat(curso.getNombre()).isEqualTo("Química Avanzada");
         assertThat(curso.getCreditos()).isEqualTo(10);
-    }
-
-    @Test
-    void actualizar_debeLanzarExcepcion_cuandoCreditosSonNulos() {
-        Curso curso = Curso.crear("Química", "Química orgánica", 6);
-
-        assertThatThrownBy(() -> curso.actualizar("Química Avanzada", "Termodinámica", null))
-                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

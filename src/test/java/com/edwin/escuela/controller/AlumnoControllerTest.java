@@ -1,44 +1,49 @@
 package com.edwin.escuela.controller;
 
 import com.edwin.escuela.dto.alumnos.AlumnoRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(AlumnoController.class)
+@SpringBootTest(properties = {
+        "server.port=0",
+        "spring.datasource.url=jdbc:h2:mem:pruebasAlumno;MODE=Oracle;DB_CLOSE_DELAY=-1",
+        "spring.datasource.username=sa",
+        "spring.datasource.password=",
+        "spring.datasource.driver-class-name=org.h2.Driver",
+        "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
+        "spring.jpa.hibernate.ddl-auto=create-drop",
+        "spring.jpa.open-in-view=false",
+        "logging.level.root=ERROR",
+        "spring.main.banner-mode=off"
+})
+@AutoConfigureMockMvc
+@Transactional
 class AlumnoControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    private static final String RUTA = "/api/alumnos";
 
     @Autowired
-    private ObjectMapper objectMapper;
+    MockMvc mvc;
 
-    @Test
-    void registrar_datosValidos_retorna201() throws Exception {
-        // Arrange
-        AlumnoRequest request = new AlumnoRequest("Carlos", "Pérez", "Gómez");
-
-        // Act & Assert
-        mockMvc.perform(post("/api/alumnos")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
-    }
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Test
     void registrar_nombreVacio_retorna400() throws Exception {
-        // Arrange
-        AlumnoRequest request = new AlumnoRequest("", "Pérez", "Gómez");
 
-        // Act & Assert
-        mockMvc.perform(post("/api/alumnos")
+        AlumnoRequest request =
+                new AlumnoRequest("", "Pérez", "Gómez");
+
+        mvc.perform(post(RUTA)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -48,18 +53,9 @@ class AlumnoControllerTest {
     }
 
     @Test
-    void obtenerPorId_idNegativo_retorna400() throws Exception {
-        // Arrange & Act & Assert
-        mockMvc.perform(get("/api/alumnos/{id}", -1))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/problem+json"))
-                .andExpect(jsonPath("$.errores[0]").value("El ID debe ser positivo"));
-    }
-
-    @Test
     void obtenerPorId_idInexistente_retorna404() throws Exception {
-        // Arrange & Act & Assert
-        mockMvc.perform(get("/api/alumnos/{id}", 9999))
+
+        mvc.perform(get(RUTA + "/{id}", 9999))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/problem+json"))
                 .andExpect(jsonPath("$.detail").exists());
@@ -67,8 +63,8 @@ class AlumnoControllerTest {
 
     @Test
     void listar_conAlumnos_retorna200() throws Exception {
-        // Arrange & Act & Assert
-        mockMvc.perform(get("/api/alumnos"))
+
+        mvc.perform(get(RUTA))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }

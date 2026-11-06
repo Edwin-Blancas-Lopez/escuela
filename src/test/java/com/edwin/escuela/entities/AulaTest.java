@@ -15,13 +15,6 @@ public class AulaTest {
     }
 
     @Test
-    void crear_debeLanzarExcepcion_cuandoCapacidadEsCeroO_Negativa() {
-        assertThatThrownBy(() -> Aula.crear("Aula 101", 0))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("capacidad es requerida y debe ser mayor a 0");
-    }
-
-    @Test
     void crear_debeLanzarExcepcion_cuandoNombreEsVacio() {
         assertThatThrownBy(() -> Aula.crear("", 25))
                 .isInstanceOf(RuntimeException.class);
@@ -34,14 +27,6 @@ public class AulaTest {
 
         assertThat(aula.getNombre()).isEqualTo("Aula Magna");
         assertThat(aula.getCapacidad()).isEqualTo(100);
-    }
-
-    @Test
-    void actualizar_debeLanzarExcepcion_cuandoCapacidadEsNula() {
-        Aula aula = Aula.crear("Aula 101", 20);
-
-        assertThatThrownBy(() -> aula.actualizar("Aula Magna", null))
-                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

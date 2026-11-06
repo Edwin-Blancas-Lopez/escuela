@@ -1,4 +1,4 @@
-package com.edwin.escuela.services.alumnos;
+package com.edwin.escuela.services;
 
 import com.edwin.escuela.dto.alumnos.AlumnoRequest;
 import com.edwin.escuela.dto.alumnos.AlumnoResponse;
@@ -8,6 +8,7 @@ import com.edwin.escuela.exceptions.RecursoNoEncontradoException;
 import com.edwin.escuela.mappers.AlumnoMapper;
 import com.edwin.escuela.repositories.AlumnoRepository;
 import com.edwin.escuela.repositories.InscripcionRepository;
+import com.edwin.escuela.services.alumnos.AlumnoServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

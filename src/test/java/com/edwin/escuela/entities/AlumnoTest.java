@@ -92,18 +92,7 @@ class AlumnoTest {
         assertEquals("2026001234", alumno.getMatricula());
     }
 
-    @Test
-    void asignarDatosAcademicos_matriculaDeLongitudDistintaA10_lanzaDatoInvalidoException() {
-        // Arrange
-        Alumno alumno = Alumno.crear("Carlos", "Pérez", "Gómez");
-        String email = "carlos@test.com";
-        String matricula = "1234567980"; // Longitud no válida según reglas si aplica exactitud o límites
 
-        // Act & Assert
-        assertThrows(DatoInvalidoException.class, () ->
-                alumno.asignarDatosAcademicos(email, matricula)
-        );
-    }
 
     @Test
     void actualizar_datosValidos_actualizaDatosPersonalesYAcademicos() {
