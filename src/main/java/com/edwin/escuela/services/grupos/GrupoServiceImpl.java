@@ -51,9 +51,9 @@ public class GrupoServiceImpl implements GrupoService{
     public GrupoResponse registrar(GrupoRequest request) {
         log.info("Registrando nuevo grupo...");
 
-        Curso curso = ServiceUtils.obtenerEntidadOException(cursoRepository, request.idCurso(), Curso.class);
-        Maestro maestro = ServiceUtils.obtenerEntidadOException(maestroRepository, request.idMaestro(), Maestro.class);
-        Aula aula = ServiceUtils.obtenerEntidadOException(aulaRepository, request.idAula(), Aula.class);
+        Curso curso = obtenerCurso(request.idCurso());
+        Maestro maestro = obtenerMaestro(request.idMaestro());
+        Aula aula = obtenerAula(request.idAula());
 
         validarUnicidad(request.idCurso(), request.idMaestro(), request.idAula(), request.periodo(), null);
 
@@ -69,9 +69,9 @@ public class GrupoServiceImpl implements GrupoService{
         Grupo grupo = obtenerGrupo(id);
         log.info("Actualizando grupo con id: {}", id);
 
-        Curso curso = ServiceUtils.obtenerEntidadOException(cursoRepository, request.idCurso(), Curso.class);
-        Maestro maestro = ServiceUtils.obtenerEntidadOException(maestroRepository, request.idMaestro(), Maestro.class);
-        Aula aula = ServiceUtils.obtenerEntidadOException(aulaRepository, request.idAula(), Aula.class);
+        Curso curso = obtenerCurso(request.idCurso());
+        Maestro maestro = obtenerMaestro(request.idMaestro());
+        Aula aula = obtenerAula(request.idAula());
 
         validarUnicidad(request.idCurso(), request.idMaestro(), request.idAula(), request.periodo(), id);
 
@@ -87,8 +87,15 @@ public class GrupoServiceImpl implements GrupoService{
         Grupo grupo = obtenerGrupo(id);
         log.info("Eliminando grupo con id: {}", id);
 
-        if (inscripcionRepository.existsByGrupoId(id) || !horarioRepository.findByGrupoId(id).isEmpty()) {
-            throw new EntidadRelacionadaException("No se puede eliminar el grupo ya que tiene inscripciones u horarios asociados");
+        boolean tieneInscripciones = inscripcionRepository.existsByGrupoId(id);
+        boolean tieneHorarios = !horarioRepository.findByGrupoId(id).isEmpty();
+
+        if (tieneInscripciones) {
+            throw new EntidadRelacionadaException("No se puede eliminar el grupo ya que tiene inscripciones asociadas");
+        }
+
+        if (tieneHorarios) {
+            throw new EntidadRelacionadaException("No se puede eliminar el grupo ya que tiene horarios asociados");
         }
 
         grupoRepository.delete(grupo);
@@ -98,6 +105,18 @@ public class GrupoServiceImpl implements GrupoService{
 
     private Grupo obtenerGrupo(Long id) {
         return ServiceUtils.obtenerEntidadOException(grupoRepository, id, Grupo.class);
+    }
+
+    private Curso obtenerCurso(Long id) {
+        return ServiceUtils.obtenerEntidadOException(cursoRepository, id, Curso.class);
+    }
+
+    private Maestro obtenerMaestro(Long id) {
+        return ServiceUtils.obtenerEntidadOException(maestroRepository, id, Maestro.class);
+    }
+
+    private Aula obtenerAula(Long id) {
+        return ServiceUtils.obtenerEntidadOException(aulaRepository, id, Aula.class);
     }
 
     private void validarUnicidad(Long cursoId, Long maestroId, Long aulaId, String periodo, Long idExcluir) {

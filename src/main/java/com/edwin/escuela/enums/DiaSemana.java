@@ -2,6 +2,7 @@ package com.edwin.escuela.enums;
 
 import com.edwin.escuela.exceptions.RecursoNoEncontradoException;
 import com.edwin.escuela.utils.StringCustomUtils;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -24,11 +25,20 @@ public enum DiaSemana {
         String descripcionNormalizada = StringCustomUtils.normalizarTexto(descripcion);
 
         for (DiaSemana diaSemana:values()){
-            if (StringCustomUtils.normalizarTexto(diaSemana.descripcion).equalsIgnoreCase(descripcionNormalizada))
+            if (StringCustomUtils.normalizarTexto(diaSemana.descripcion).equalsIgnoreCase(descripcionNormalizada)
+                    || diaSemana.name().equalsIgnoreCase(descripcionNormalizada))
                 return diaSemana;
         }
 
         throw new RecursoNoEncontradoException("No existe un dia de la semana con la descripcion: " + descripcion);
+    }
+
+    @JsonCreator
+    public static DiaSemana fromJson(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return obtenerDiaSemanaPorDescripcion(value);
     }
 
 }

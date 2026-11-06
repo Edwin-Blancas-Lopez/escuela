@@ -48,7 +48,7 @@
         public AulaResponse registrar(AulaRequest request) {
             log.info("Registrando nueva aula...");
 
-            validarNombreUnico(request.nombre());
+            validarValorUnico(request.nombre());
 
             Aula aula = aulaMapper.requestAEntidad(request);
             aulaRepository.saveAndFlush(aula);
@@ -63,7 +63,7 @@
 
             log.info("Actualizando aula con id: {}", id);
 
-            validarCambioNombreUnico(request.nombre(), id);
+            validarCambioValorUnico(request.nombre(), id);
 
             aula.actualizar(
                     request.nombre(),
@@ -95,15 +95,15 @@
             return ServiceUtils.obtenerEntidadOException(aulaRepository, id, Aula.class);
         }
 
-        private void validarNombreUnico(String nombre) {
-            if (aulaRepository.existsByNombreIgnoreCase(nombre.trim())) {
-                throw new ConflictoException("Ya existe un aula registrada con el nombre: " + nombre);
+        private void validarValorUnico(String valor) {
+            if (aulaRepository.existsByNombreIgnoreCase(valor.trim())) {
+                throw new ConflictoException("Ya existe un aula registrada con este valor: " + valor);
             }
         }
 
-        private void validarCambioNombreUnico(String nombre, Long id) {
-            if (aulaRepository.existsByNombreIgnoreCaseAndIdNot(nombre.trim(), id)) {
-                throw new ConflictoException("Ya existe un aula registrada con el nombre: " + nombre);
+        private void validarCambioValorUnico(String valor, Long id) {
+            if (aulaRepository.existsByNombreIgnoreCaseAndIdNot(valor.trim(), id)) {
+                throw new ConflictoException("Ya existe un aula registrada con ese valor: " + valor);
             }
         }
     }

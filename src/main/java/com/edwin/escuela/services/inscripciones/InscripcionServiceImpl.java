@@ -49,8 +49,8 @@ public class InscripcionServiceImpl implements InscripcionService{
     @Override
     public InscripcionResponse registrar(InscripcionRequest request) {
         log.info("Registrando inscripción...");
-        Alumno alumno = ServiceUtils.obtenerEntidadOException(alumnoRepository, request.idAlumno(), Alumno.class);
-        Grupo grupo = ServiceUtils.obtenerEntidadOException(grupoRepository, request.idGrupo(), Grupo.class);
+        Alumno alumno = obtenerAlumno(request.idAlumno());
+        Grupo grupo = obtenerGrupo(request.idGrupo());
 
         if (inscripcionRepository.existsByAlumnoIdAndGrupoId(request.idAlumno(), request.idGrupo())) {
             throw new ConflictoException("El alumno ya se encuentra inscrito en este grupo");
@@ -67,8 +67,8 @@ public class InscripcionServiceImpl implements InscripcionService{
         Inscripcion inscripcion = obtenerInscripcion(id);
         log.info("Actualizando inscripción con id: {}", id);
 
-        Alumno alumno = ServiceUtils.obtenerEntidadOException(alumnoRepository, request.idAlumno(), Alumno.class);
-        Grupo grupo = ServiceUtils.obtenerEntidadOException(grupoRepository, request.idGrupo(), Grupo.class);
+        Alumno alumno = obtenerAlumno(request.idAlumno());
+        Grupo grupo = obtenerGrupo(request.idGrupo());
 
         if (inscripcionRepository.existsByAlumnoIdAndGrupoIdAndIdNot(request.idAlumno(), request.idGrupo(), id)) {
             throw new ConflictoException("Ya existe otra inscripción activa con este alumno y grupo");
@@ -95,5 +95,13 @@ public class InscripcionServiceImpl implements InscripcionService{
 
     private Inscripcion obtenerInscripcion(Long id) {
         return ServiceUtils.obtenerEntidadOException(inscripcionRepository, id, Inscripcion.class);
+    }
+
+    private Alumno obtenerAlumno(Long id) {
+        return ServiceUtils.obtenerEntidadOException(alumnoRepository, id, Alumno.class);
+    }
+
+    private Grupo obtenerGrupo(Long id) {
+        return ServiceUtils.obtenerEntidadOException(grupoRepository, id, Grupo.class);
     }
 }

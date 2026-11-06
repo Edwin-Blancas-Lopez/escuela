@@ -25,7 +25,10 @@ public class HorarioMapper implements CommonMapper<HorarioRequest, HorarioRespon
                 entidad.getGrupo().getPeriodo()
         );
 
-        String formatoHorario = entidad.getDiaSemana() + " " + entidad.getHoraInicio() + " " + entidad.getHoraFin();
+        String diaNombre = entidad.getDiaSemana().name();
+        String diaFormateado = diaNombre.charAt(0) + diaNombre.substring(1).toLowerCase();
+
+        String formatoHorario = diaFormateado + " " + entidad.getHoraInicio() + " " + entidad.getHoraFin();
 
         return new HorarioResponse(
                 entidad.getId(),
