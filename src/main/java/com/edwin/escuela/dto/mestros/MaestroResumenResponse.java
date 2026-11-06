@@ -1,0 +1,19 @@
+package com.edwin.escuela.dto.mestros;
+
+import com.edwin.escuela.dto.datos.DatosCurso;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.List;
+
+@Schema(description = "Informacion de un maestro")
+public record MaestroResumenResponse(
+        @Schema(description = "Nombre completo del maestro", example = "Máximo Decimo Meridio")
+        String nombre,
+
+        @Schema(description = "Email del maestro", example = "test@test.com")
+        String email,
+
+        @Schema(description = "Telefono del maestro", example = "1234568790")
+        String telefono
+) {
+}

@@ -1,8 +1,11 @@
 package com.edwin.escuela.dto.grupos;
 
 import com.edwin.escuela.dto.aulas.AulaResponse;
+import com.edwin.escuela.dto.aulas.AulaResumenResponse;
 import com.edwin.escuela.dto.cursos.CursoResponse;
+import com.edwin.escuela.dto.cursos.CursoResumenResponse;
 import com.edwin.escuela.dto.mestros.MaestroResponse;
+import com.edwin.escuela.dto.mestros.MaestroResumenResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
@@ -12,13 +15,13 @@ public record GrupoResponse(
         Long id,
 
         @Schema(description = "Información del curso")
-        CursoResponse curso,
+        CursoResumenResponse curso,
 
         @Schema(description = "Información del maestro")
-        MaestroResponse maestro,
+        MaestroResumenResponse maestro,
 
         @Schema(description = "Información del aula")
-        AulaResponse aula,
+        AulaResumenResponse aula,
 
         @Schema(description = "Lista de horarios asignados al grupo", example = "[\"Lunes 08:00 - 10:00\"]")
         List<String> horarios,

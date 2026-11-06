@@ -43,7 +43,7 @@ public class CalificacionServiceImpl implements CalificacionService{
     @Override
     public CalificacionResponse registrar(CalificacionRequest request) {
         log.info("Registrando calificación...");
-        Inscripcion inscripcion = ServiceUtils.obtenerEntidadOException(inscripcionRepository, request.idInscripcion(), Inscripcion.class);
+        Inscripcion inscripcion = obtenerInscripcion(request.idInscripcion());
 
         if (calificacionRepository.existsByInscripcionId(request.idInscripcion())) {
             throw new ConflictoException("Ya existe una calificación registrada para esta inscripción");
@@ -60,7 +60,7 @@ public class CalificacionServiceImpl implements CalificacionService{
         Calificacion calificacion = obtenerCalificacion(id);
         log.info("Actualizando calificación con id: {}", id);
 
-        Inscripcion inscripcion = ServiceUtils.obtenerEntidadOException(inscripcionRepository, request.idInscripcion(), Inscripcion.class);
+        Inscripcion inscripcion = obtenerInscripcion(request.idInscripcion());
 
         if (calificacionRepository.existsByInscripcionIdAndIdCalificacionNot(request.idInscripcion(), id)) {
             throw new ConflictoException("Ya existe otra calificación asociada a esta inscripción");
@@ -82,5 +82,9 @@ public class CalificacionServiceImpl implements CalificacionService{
 
     private Calificacion obtenerCalificacion(Long id) {
         return ServiceUtils.obtenerEntidadOException(calificacionRepository, id, Calificacion.class);
+    }
+
+    private Inscripcion obtenerInscripcion(Long id) {
+        return ServiceUtils.obtenerEntidadOException(inscripcionRepository, id, Inscripcion.class);
     }
 }
