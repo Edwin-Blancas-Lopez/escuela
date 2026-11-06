@@ -2,6 +2,8 @@ package com.edwin.escuela.dto.datos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
+
 @Schema(description = "Datos de calificacion")
 public record DatosCalificacion(
         @Schema(description = "Nombre el curso", example = "Matematicas I")
@@ -11,7 +13,7 @@ public record DatosCalificacion(
         String periodo,
 
         @Schema(description = "Valor de la calificacion", example = "9.9")
-        String calificacion
+        BigDecimal calificacion
 ) {
 
 }

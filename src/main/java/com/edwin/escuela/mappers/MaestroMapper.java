@@ -21,11 +21,11 @@ public class MaestroMapper implements CommonMapper<MaestroRequest, MaestroRespon
         return request == null
                 ? null
                 : Maestro.crear(
-                        request.nombre(),
-                    request.apellidoPaterno(),
-                    request.apellidoMaterno(),
-                    request.email(),
-                    request.telefono());
+                request.nombre(),
+                request.apellidoPaterno(),
+                request.apellidoMaterno(),
+                request.email(),
+                request.telefono());
     }
 
     @Override
@@ -33,11 +33,11 @@ public class MaestroMapper implements CommonMapper<MaestroRequest, MaestroRespon
         return entidad == null
                 ? null
                 : new MaestroResponse(
-                        entidad.getId(),
-                        entidad.obtenerNombreCompleto(),
-                        entidad.getEmail(),
-                        entidad.getTelefono(),
-                        null);
+                entidad.getId(),
+                entidad.obtenerNombreCompleto(),
+                entidad.getEmail(),
+                entidad.getTelefono(),
+                entidadADatosCurso(entidad));
     }
 
     public List<DatosCurso> entidadADatosCurso(Maestro entidad){

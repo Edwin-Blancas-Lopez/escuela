@@ -33,6 +33,7 @@ public class Horario {
     @Column(name = "HORA_FIN", nullable = false, length = 5)
     private String horaFin;
 
+
     public static void validarDatos(Grupo grupo, DiaSemana diaSemana, String horaInicio, String horaFin) {
         if (grupo == null) {
             throw new IllegalArgumentException("El grupo es requerido");
@@ -42,8 +43,23 @@ public class Horario {
         }
         StringCustomUtils.validarTamanio(horaInicio, 5, 5, "La hora de inicio es requerida y debe tener el formato HH:MM");
         StringCustomUtils.validarTamanio(horaFin, 5, 5, "La hora de fin es requerida y debe tener el formato HH:MM");
-    }
 
+        // Validación de coherencia de horario requerida por el contrato (Entity -> 400 DatoInvalidoException)
+        if (horaInicio.compareTo(horaFin) >= 0) {
+            throw new com.edwin.escuela.exceptions.DatoInvalidoException("La hora de fin debe ser posterior a la hora de inicio");
+        }
+    }
+    /*public static void validarDatos(Grupo grupo, DiaSemana diaSemana, String horaInicio, String horaFin) {
+        if (grupo == null) {
+            throw new IllegalArgumentException("El grupo es requerido");
+        }
+        if (diaSemana == null) {
+            throw new IllegalArgumentException("El día de la semana es requerido");
+        }
+        StringCustomUtils.validarTamanio(horaInicio, 5, 5, "La hora de inicio es requerida y debe tener el formato HH:MM");
+        StringCustomUtils.validarTamanio(horaFin, 5, 5, "La hora de fin es requerida y debe tener el formato HH:MM");
+    }
+*/
     public void actualizar(Grupo grupo, DiaSemana diaSemana, String horaInicio, String horaFin) {
         validarDatos(grupo, diaSemana, horaInicio, horaFin);
 

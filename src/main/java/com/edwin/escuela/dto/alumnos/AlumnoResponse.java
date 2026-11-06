@@ -22,7 +22,7 @@ public record AlumnoResponse(
         String matricula,
 
         @Schema(description = "Fecha de ingreso del alumno a la institución", example = "2026-01-15")
-        LocalDate fechaIngreso,
+        String fechaIngreso,
 
         @Schema(description = "Datos de las calificaciones del alumno")
         List<DatosCalificacion> calificaciones,

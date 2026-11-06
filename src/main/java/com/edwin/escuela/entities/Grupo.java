@@ -4,6 +4,9 @@ import com.edwin.escuela.utils.StringCustomUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(
         name = "GRUPOS",
@@ -78,5 +81,16 @@ public class Grupo {
                 .aula(aula)
                 .periodo(periodo.trim())
                 .build();
+    }
+
+    // En com.edwin.escuela.entities.Grupo.java
+
+    @Builder.Default
+    @OneToMany(mappedBy = "grupo", fetch = FetchType.LAZY)
+    private List<Horario> horarios = new ArrayList<>();
+
+    // Asegúrate de tener los getters (Lombok @Getter ya lo incluye si está anotado en la clase)
+    public List<Horario> getHorarios() {
+        return horarios;
     }
 }

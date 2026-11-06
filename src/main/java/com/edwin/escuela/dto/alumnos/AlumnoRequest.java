@@ -22,16 +22,5 @@ public record AlumnoRequest(
         @NotBlank(message = "El apellido materno es requerido")
         @Size(min = 1, max = 50, message = "El apellido materno debe tener entre 1 y 50 caracteres")
         String apellidoMaterno
-
-      /*  @Schema(description = "Email del alumno", example = "carlos.perez@test.com")
-        @NotBlank(message = "El email es requerido")
-        @Size(min = 8, max = 100, message = "El email debe tener entre 8 y 100 caracteres")
-        @Email(message = "El email debe tener un formato válido (ejemplo@dominio.com)")
-        String email,
-
-        @Schema(description = "Matrícula del alumno", example = "2023001234")
-        @NotBlank(message = "La matrícula es requerida")
-        @Size(min = 1, max = 10, message = "La matrícula debe tener entre 1 y 10 caracteres")
-        String matricula*/
 ) {
 }

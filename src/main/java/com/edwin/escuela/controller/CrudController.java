@@ -73,7 +73,7 @@ public class CrudController<RQ, RS, S extends CrudService<RQ, RS>> {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un registro")
     @ApiResponse(responseCode = "204", description = "Registro eliminado eliminada")
-   @ApiResponse(responseCode = "404", description = "El registro no existe", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemaDoc.class)))
+    @ApiResponse(responseCode = "404", description = "El registro no existe", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemaDoc.class)))
     @ApiResponse(responseCode = "409", description = "El registro está en uso y no puede eliminarse", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemaDoc.class)))
     public ResponseEntity<Void> eliminar(
             @Parameter(description = "Id del registro", example = "1")

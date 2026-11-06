@@ -25,13 +25,13 @@ public record MaestroRequest(
 
         @Schema(description = "Email del maestro", example = "test@test.com")
         @NotBlank(message = "El email es requerido")
-        @Size(min = 1, max = 50, message = "El email debe tener entre 8 y 100 caracteres")
+        @Size(min = 1, max = 100, message = "El email debe tener entre 8 y 100 caracteres")
         @Email(message = "El email debe tener un formato válido (ejemplo@dominio.com)")
         String email,
 
         @Schema(description = "Telefono del maestro", example = "1234567890")
         @NotBlank(message = "El telefono es requerido")
-        @Pattern(regexp = "^[0-9]{10}", message = "El apellido paterno debe tener entre 1 y 50 caracteres")
+        @Pattern(regexp = "^[0-9]{10}$", message = "El telefono debe tener 10 caracteres")
         String telefono
 ) {
 
