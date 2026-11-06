@@ -1,12 +1,13 @@
 package com.edwin.escuela.entities;
 
+import com.edwin.escuela.utils.StringCustomUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "INSCRIPCIONES", /*schema = "ESCUELA",*/ uniqueConstraints = {
+@Table(name = "INSCRIPCIONES", uniqueConstraints = {
         @UniqueConstraint(
                 name = "INSCRIPCION_ALU_GRU_UK",
                 columnNames = {
@@ -41,4 +42,32 @@ public class Inscripcion {
 
     @OneToOne(mappedBy = "inscripcion")
     private Calificacion calificacion;
+
+    public static void validarDatos(Alumno alumno, Grupo grupo) {
+        if (alumno == null) {
+            throw new IllegalArgumentException("El alumno es requerido");
+        }
+
+        if (grupo == null) {
+            throw new IllegalArgumentException("El grupo es requerido");
+        }
+
+    }
+
+    public void actualizar(Alumno alumno, Grupo grupo) {
+        validarDatos(alumno, grupo);
+
+        this.alumno = alumno;
+        this.grupo = grupo;
+    }
+
+    public static Inscripcion crear(Alumno alumno, Grupo grupo) {
+        validarDatos(alumno, grupo);
+
+        return Inscripcion.builder()
+                .alumno(alumno)
+                .grupo(grupo)
+                .fechaInscripcion(LocalDate.now())
+                .build();
+    }
 }
